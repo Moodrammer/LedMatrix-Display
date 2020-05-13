@@ -15,10 +15,10 @@ unsigned long currentMillis;
 unsigned long shiftTime;
 //led matrix
 int currentRow = 0;
-bool columnTestPattern[10][10] = {{1,0,0,0,0,0,0,0,0,0},{0,1,0,0,0,0,0,0,0,0},{0,0,1,0,0,0,0,0,0,0},{0,0,0,1,0,0,0,0,0,0},{0,0,0,0,1,0,0,0,0,0},{0,0,0,0,0,1,0,0,0,0},
-{0,0,0,0,0,0,1,0,0,0},{0,0,0,0,0,0,0,1,0,0},{0,0,0,0,0,0,0,0,1,0},{0,0,0,0,0,0,0,0,0,1}};
+int columnTestPattern[10] = {B10* 256 + B00000000, B01* 256 + B00000000, B00* 256 + B10000000 , B00* 256 + B01000000, B00* 256 + B00100000, B00* 256 + B00010000,
+B00* 256 + B00001000 , B00* 256 + B00000100, B00* 256 + B00000010, B00* 256 + B00000001};
+int rowTestPattern = B11 * 256 + B11111111;
 
-bool out[] = {1,1,1,1,1,1,1,1,1,1};
 
 void setup() {
   for(int i = col0; i <= col5; i++) pinMode(i, OUTPUT);
@@ -37,17 +37,17 @@ void loop() {
 }
 
 //pass a bit string to output on the columns of the matrix 
-void columnWrite(bool column[]){
-  digitalWrite(col0, column[9]);
-  digitalWrite(col1, column[8]);
-  digitalWrite(col2, column[7]);
-  digitalWrite(col3, column[6]);
-  digitalWrite(col4, column[5]);
-  digitalWrite(col5, column[4]);
-  digitalWrite(col6, column[3]);
-  digitalWrite(col7, column[2]);
-  digitalWrite(col8, column[1]);
-  digitalWrite(col9, column[0]);
+void columnWrite(int column){
+  digitalWrite(col0, column & 1);
+  digitalWrite(col1, column & 2);
+  digitalWrite(col2, column & 4);
+  digitalWrite(col3, column & 8);
+  digitalWrite(col4, column & 16);
+  digitalWrite(col5, column & 32);
+  digitalWrite(col6, column & 64);
+  digitalWrite(col7, column & 128);
+  digitalWrite(col8, (column / 256) & 1);
+  digitalWrite(col9, (column/ 256) & 2);
 }
 
 //switches the current row on by making the common cathodes of the Leds connected to 0 
@@ -62,10 +62,12 @@ void switchRowOn(int row){
 void rowTesting(){
     for(int i = 0; i <= 9; i++){
       switchRowOn(currentRow);
-      columnWrite(out);
+      columnWrite(rowTestPattern);
       currentRow++;
       delay(200);
   }
+  //clear the led matrix
+  columnWrite(0);
 }
 void columnTesting(){
     int row = 0;
