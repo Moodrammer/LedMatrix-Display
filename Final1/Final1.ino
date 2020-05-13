@@ -17,6 +17,8 @@ unsigned long shiftTime;
 int currentRow = 0;
 int columnTestPattern[10] = {B10* 256 + B00000000, B01* 256 + B00000000, B00* 256 + B10000000 , B00* 256 + B01000000, B00* 256 + B00100000, B00* 256 + B00010000,
 B00* 256 + B00001000 , B00* 256 + B00000100, B00* 256 + B00000010, B00* 256 + B00000001};
+int currentDrawing[10] = {0,0,0,0,0,0,0,0,0,0};
+
 int rowTestPattern = B11 * 256 + B11111111;
 
 
@@ -28,12 +30,17 @@ void setup() {
   //test switching the matrix rows and columns
   columnTesting();
   rowTesting();
+  //reset the currentRow to 0
+  currentRow = 0;
 }
 
 void loop() {
   //keep track of the number of milliseconds from the start of the program
   currentMillis = millis();
-
+  if(shiftTime - currentMillis >= 1){
+    drawCurrent();
+    shiftTime = currentMillis;
+  }
 }
 
 //pass a bit string to output on the columns of the matrix 
@@ -82,4 +89,12 @@ void columnTesting(){
         current = millis();
       }
     }
+}
+
+//Draws the current array 
+void drawCurrent(){
+  switchRowOn(currentRow);
+  //output the current row data in the columns
+  columnWrite(currentDrawing[currentRow]);
+  currentRow = (currentRow + 1) % 10;
 }
