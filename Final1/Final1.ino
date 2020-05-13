@@ -12,14 +12,22 @@
 //variables
 //time management
 unsigned long currentMillis;
-unsigned long shiftTime;
+unsigned long shiftTime = 0;
+unsigned long drawTime = 0;
 //led matrix
 int currentRow = 0;
 int columnTestPattern[10] = {B10* 256 + B00000000, B01* 256 + B00000000, B00* 256 + B10000000 , B00* 256 + B01000000, B00* 256 + B00100000, B00* 256 + B00010000,
 B00* 256 + B00001000 , B00* 256 + B00000100, B00* 256 + B00000010, B00* 256 + B00000001};
-int currentDrawing[10] = {0,0,0,0,0,0,0,0,0,0};
-
 int rowTestPattern = B11 * 256 + B11111111;
+//Drawing
+int currentDrawing[10] = {0,0,0,0,0,0,0,0,0,0};
+int currentPattern[10] = {1023, 513, 513, 513, 513, 513, 513, 513, 513, 1023};
+int patternRowData = -1;
+int changingRowIndex = -1;
+int bitPositionValue = 512;
+boolean drawing = true;
+
+
 
 
 void setup() {
@@ -37,10 +45,19 @@ void setup() {
 void loop() {
   //keep track of the number of milliseconds from the start of the program
   currentMillis = millis();
-  if(shiftTime - currentMillis >= 1){
+  if(currentMillis - shiftTime >= 1){
     drawCurrent();
     shiftTime = currentMillis;
   }
+  //if a pattern is currently being drawn
+  if(drawing){
+    //each millisecond light one Led of the pattern
+    if(currentMillis - drawTime >= 100){
+      drawTime = currentMillis;
+      setCurrentDrawing();
+    }
+  }
+  
 }
 
 //pass a bit string to output on the columns of the matrix 
@@ -97,4 +114,36 @@ void drawCurrent(){
   //output the current row data in the columns
   columnWrite(currentDrawing[currentRow]);
   currentRow = (currentRow + 1) % 10;
+}
+
+//called to change the current drawing according to the current pattern which is determined by the key pressed
+//Function depends that the current pattern being drawn is already set
+void setCurrentDrawing(){
+  if(changingRowIndex == -1){
+    //set the patternRowData to the first row
+    changingRowIndex ++;
+    patternRowData = currentPattern[changingRowIndex];
+  }
+
+  while(patternRowData < bitPositionValue) bitPositionValue /= 2;
+  currentDrawing[changingRowIndex] += bitPositionValue;
+  patternRowData -= bitPositionValue;
+  bitPositionValue /= 2;
+  
+  //if there is no more ones in the current row of the current pattern go to the next row
+  if(patternRowData == 0){
+   changingRowIndex ++;
+   if(changingRowIndex > 9){
+    //This means that we finished drawing the 10 columns of the currentPattern
+    //Reset all the variables
+    drawing = false;
+    changingRowIndex = -1;
+    bitPositionValue = 512; 
+   }
+   else{
+    //Get the next Row in the current Pattern
+    patternRowData = currentPattern[changingRowIndex];
+    bitPositionValue = 512; 
+   }
+  }
 }
