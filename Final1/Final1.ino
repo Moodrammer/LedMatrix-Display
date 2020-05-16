@@ -21,7 +21,7 @@ B00* 256 + B00001000 , B00* 256 + B00000100, B00* 256 + B00000010, B00* 256 + B0
 int rowTestPattern = B11 * 256 + B11111111;
 //Drawing
 int currentDrawing[10] = {0,0,0,0,0,0,0,0,0,0};
-int currentPattern[10] = {1023, 513, 513, 513, 513, 513, 513, 513, 513, 1023};
+int currentPattern[10] = {513, 513, 513, 513, 513, 513, 513, 513, 513, 513};
 int patternRowData = -1;
 int changingRowIndex = -1;
 int bitPositionValue = 512;
