@@ -9,6 +9,7 @@
 #define col8 8
 #define col9 9
 #define clockPin 15
+#define keypadPin 14
 
 //variables
 //time management
@@ -17,23 +18,23 @@ unsigned long shiftTime = 0;
 unsigned long drawTime = 0;
 //led matrix
 int currentRow = 0;
-int columnTestPattern[10] = {B10* 256 + B00000000, B01* 256 + B00000000, B00* 256 + B10000000 , B00* 256 + B01000000, B00* 256 + B00100000, B00* 256 + B00010000,
-B00* 256 + B00001000 , B00* 256 + B00000100, B00* 256 + B00000010, B00* 256 + B00000001};
 int rowTestPattern = B11 * 256 + B11111111;
 //Drawing
 int currentDrawing[10] = {0,0,0,0,0,0,0,0,0,0};
-int currentPattern[10] = {1023, 1023, 1023, 1023, 1023, 1023, 1023, 1023, 1023, 1023};
+int * currentPattern;
+int test[10] = {0,1,0,1,0,1,0,1,0,1};
 int patternRowData = -1;
 int changingRowIndex = -1;
 int bitPositionValue = 512;
 boolean drawing = true;
-
+//keypad variables
+bool isKeyRead = false;
 
 
 
 void setup() {
-  for(int i = col0; i <= col5; i++) pinMode(i, OUTPUT);
-  for(int i = col6; i <= col9; i++) pinMode(i, OUTPUT);
+  for(int i = col0; i <= col9; i++) pinMode(i, OUTPUT);
+  pinMode(clockPin, OUTPUT);
   for(int i = 16; i <= 19; i++) pinMode(i, OUTPUT);  
   
   //test switching the matrix rows and columns
@@ -41,9 +42,22 @@ void setup() {
   rowTesting();
   //reset the currentRow to 0
   currentRow = 0;
+  Serial.begin(9600);
 }
 
 void loop() {
+  //Read keypad
+  if(analogRead(keypadPin)){
+    if(!isKeyRead){
+      char key = getKeyPressed();
+      Serial.println(key);
+    }
+  }
+  else{
+    isKeyRead = false;
+  }
+
+  currentPattern = test;
   //keep track of the number of milliseconds from the start of the program
   currentMillis = millis();
   if(currentMillis - shiftTime >= 1){
@@ -165,5 +179,41 @@ void clearMatrix(){
   for(int i = 0; i <= 9; i++){
     switchRowOn(i);
     pulseRow();
+  }
+}
+
+char getKeyPressed(){
+  int key = analogRead(keypadPin);
+  switch(key){
+    case(852):
+    isKeyRead = true;
+    return '0';
+    case(786):
+    isKeyRead = true;
+    return '1';
+    case(730):
+    isKeyRead = true;
+    return '2';
+    case(681):
+    isKeyRead = true;
+    return '3';
+    case(639):
+    isKeyRead = true;
+    return '4';
+    case(601):
+    isKeyRead = true;
+    return '5';
+    case(568):
+    isKeyRead = true;
+    return '6';
+    case(538):
+    isKeyRead = true;
+    return '7';
+    case(511):
+    isKeyRead = true;
+    return '8';
+    case(486):
+    isKeyRead = true;
+    return '9';
   }
 }
