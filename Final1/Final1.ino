@@ -4,10 +4,11 @@
 #define col3 3
 #define col4 4
 #define col5 5
-#define col6 7
-#define col7 8
-#define col8 9
-#define col9 10
+#define col6 6
+#define col7 7
+#define col8 8
+#define col9 9
+#define clockPin 15
 
 //variables
 //time management
@@ -87,6 +88,7 @@ void rowTesting(){
     for(int i = 0; i <= 9; i++){
       switchRowOn(currentRow);
       columnWrite(rowTestPattern);
+      pulseRow();
       currentRow++;
       delay(200);
   }
@@ -146,4 +148,9 @@ void setCurrentDrawing(){
     bitPositionValue = 512; 
    }
   }
+}
+
+void pulseRow(){
+  digitalWrite(clockPin, 1);
+  digitalWrite(clockPin, 0);
 }
