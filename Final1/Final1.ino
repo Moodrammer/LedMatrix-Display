@@ -22,13 +22,15 @@ int rowTestPattern = B11 * 256 + B11111111;
 //Drawing
 int currentDrawing[10] = {0,0,0,0,0,0,0,0,0,0};
 int * currentPattern;
-int test[10] = {0,1,0,1,0,1,0,1,0,1};
 int patternRowData = -1;
 int changingRowIndex = -1;
 int bitPositionValue = 512;
-boolean drawing = true;
+boolean drawing = false;
+boolean endOfPattern;
+//patterns
+int one[10] = {248, 248, 56, 56, 56, 56, 56, 56, 252, 252};
 //keypad variables
-bool isKeyRead = false;
+boolean isKeyRead = false;
 
 
 
@@ -42,34 +44,38 @@ void setup() {
   rowTesting();
   //reset the currentRow to 0
   currentRow = 0;
-  Serial.begin(9600);
 }
 
 void loop() {
+  currentMillis = millis();
   //Read keypad
   if(analogRead(keypadPin)){
     if(!isKeyRead){
-      char key = getKeyPressed();
-      Serial.println(key);
+      getKeyPressed();
     }
   }
   else{
     isKeyRead = false;
   }
-
-  currentPattern = test;
-  //keep track of the number of milliseconds from the start of the program
-  currentMillis = millis();
+  //keep drawing the current pattern
   if(currentMillis - shiftTime >= 1){
-    drawCurrent();
-    shiftTime = currentMillis;
+     drawCurrent();
+     shiftTime = currentMillis;
   }
-  //if a pattern is currently being drawn
+
+  //keep track of the number of milliseconds from the start of the program
+  
   if(drawing){
+    //if a pattern is currently being drawn
+    
     //each millisecond light one Led of the pattern
     if(currentMillis - drawTime >= 100){
       drawTime = currentMillis;
       setCurrentDrawing();
+      if(endOfPattern){
+        drawing = false;
+        endOfPattern = false;
+      }
     }
   }
   
@@ -142,6 +148,7 @@ void setCurrentDrawing(){
     //set the patternRowData to the first row
     changingRowIndex ++;
     patternRowData = currentPattern[changingRowIndex];
+    bitPositionValue = 512;
   }
 
   while(patternRowData < bitPositionValue) bitPositionValue /= 2;
@@ -155,7 +162,7 @@ void setCurrentDrawing(){
    if(changingRowIndex > 9){
     //This means that we finished drawing the 10 columns of the currentPattern
     //Reset all the variables
-    drawing = false;
+    endOfPattern = true;
     changingRowIndex = -1;
     bitPositionValue = 512; 
    }
@@ -182,38 +189,47 @@ void clearMatrix(){
   }
 }
 
-char getKeyPressed(){
+void getKeyPressed(){
   int key = analogRead(keypadPin);
   switch(key){
     case(852):
     isKeyRead = true;
-    return '0';
+    return;
     case(786):
+    //before drawing clear the matrix
+    //reset current Drawing array
+    for(int i = 0; i <= 9; i++) currentDrawing[i] = 0;
+    //clear the ledMatrix
+    clearMatrix();
+    currentPattern = one;
+    changingRowIndex = -1;
+    currentRow = 0;
+    drawing = true;
     isKeyRead = true;
-    return '1';
+    return;
     case(730):
     isKeyRead = true;
-    return '2';
+    return;
     case(681):
     isKeyRead = true;
-    return '3';
+    return;
     case(639):
     isKeyRead = true;
-    return '4';
+    return;
     case(601):
     isKeyRead = true;
-    return '5';
+    return;
     case(568):
     isKeyRead = true;
-    return '6';
+    return;
     case(538):
     isKeyRead = true;
-    return '7';
+    return;
     case(511):
     isKeyRead = true;
-    return '8';
+    return;
     case(486):
     isKeyRead = true;
-    return '9';
+    return;
   }
 }
