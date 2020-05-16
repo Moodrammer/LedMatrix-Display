@@ -22,7 +22,7 @@ B00* 256 + B00001000 , B00* 256 + B00000100, B00* 256 + B00000010, B00* 256 + B0
 int rowTestPattern = B11 * 256 + B11111111;
 //Drawing
 int currentDrawing[10] = {0,0,0,0,0,0,0,0,0,0};
-int currentPattern[10] = {513, 513, 513, 513, 513, 513, 513, 513, 513, 513};
+int currentPattern[10] = {1023, 1023, 1023, 1023, 1023, 1023, 1023, 1023, 1023, 1023};
 int patternRowData = -1;
 int changingRowIndex = -1;
 int bitPositionValue = 512;
@@ -89,32 +89,35 @@ void rowTesting(){
       switchRowOn(currentRow);
       columnWrite(rowTestPattern);
       pulseRow();
-      currentRow++;
       delay(200);
+      switchRowOn(currentRow);
+      columnWrite(0);
+      pulseRow();
+      currentRow++;
   }
   //clear the led matrix
   columnWrite(0);
 }
 void columnTesting(){
-    int row = 0;
-    for(int i = 0; i <= 9; i++){
-      columnWrite(columnTestPattern[i]);
-      unsigned long start = millis();
-      unsigned long current = millis();
-      while(current - start <= 200){
-        switchRowOn(row);
-        delay(1);
-        row = (row + 1) % 10;
-        current = millis();
-      }
-    }
+    int column = 512;
+    while(column != 0){
+       columnWrite(column);
+       for(int i = 0; i <= 9; i++){
+        switchRowOn(i);
+        pulseRow();
+       }
+       delay(200);
+       column /= 2;
+   }
+   clearMatrix();
 }
 
 //Draws the current array 
 void drawCurrent(){
-  switchRowOn(currentRow);
   //output the current row data in the columns
   columnWrite(currentDrawing[currentRow]);
+  switchRowOn(currentRow);
+  pulseRow();
   currentRow = (currentRow + 1) % 10;
 }
 
@@ -153,4 +156,14 @@ void setCurrentDrawing(){
 void pulseRow(){
   digitalWrite(clockPin, 1);
   digitalWrite(clockPin, 0);
+}
+
+
+void clearMatrix(){
+  columnWrite(0);
+  //pulse all rows
+  for(int i = 0; i <= 9; i++){
+    switchRowOn(i);
+    pulseRow();
+  }
 }
