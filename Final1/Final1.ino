@@ -40,7 +40,15 @@ int eight[10] = {120, 252, 204, 204, 124, 248, 204, 204, 252, 120};
 int nine[10] = {120, 252, 204, 204, 252, 124, 12, 204, 252, 120};
 //emotions
 int emo0[10] = {252, 258, 513, 645, 585, 513, 561, 585, 258, 252};
-int emo1[10] = {252, 258, 513, 717, 581, 513, 561, 585, 258, 252};
+int emo1[10] = {252, 510, 1023, 819, 955, 1023, 903, 891, 510, 252};
+int emo2[10] = {252, 258, 513, 585, 585, 513, 561, 633, 258, 252};
+int emo3[10] = {252, 258, 513, 585, 585, 513, 765, 633, 258, 252};
+int emo4[10] = {252, 258, 585, 585, 513, 561, 633, 561, 258, 252};
+int emo5[10] = {252, 258, 633, 645, 513, 585, 585, 513, 258, 252};
+int emo6[10] = {252, 510, 1015, 823, 1023, 1023, 891, 903, 510, 252}; 
+int emo7[10] = {252, 510, 1023, 513, 561, 819, 1023, 891, 390, 252}; 
+int emo8[10] = {48, 48, 112, 252, 1022, 1022, 1022, 1022, 0, 0};
+int emo9[10] = {252, 510, 951, 951, 1023, 1023, 1023, 1023, 510, 252};
 //keypad variables
 boolean isKeyRead = false;
 char currentkey = ' ';
@@ -237,56 +245,56 @@ void setKeyPressed(){
       break;
     case(730):
       if(currentkey != '2'){
-        setPattern(two);
+        (isNumericMode)?setPattern(two):setPattern(emo2);
         currentkey = '2';
         drawing = true;
       }
       break;
      case(681):
       if(currentkey != '3'){
-        setPattern(three);
+        (isNumericMode)?setPattern(three):setPattern(emo3);
         currentkey = '3';
         drawing = true;
       }
       break;
     case(639):
       if(currentkey != '4'){
-        setPattern(four);
+        (isNumericMode)?setPattern(four):setPattern(emo4);
         currentkey = '4';
         drawing = true;
       }
       break;
     case(601):
       if(currentkey != '5'){
-        setPattern(five);
+        (isNumericMode)?setPattern(five):setPattern(emo5);
         currentkey = '5';
         drawing = true;
       }
       break;
     case(568):
       if(currentkey != '6'){
-        setPattern(six);
+        (isNumericMode)?setPattern(six):setPattern(emo6);
         currentkey = '6';
         drawing = true;
       }
       break;
     case(538):
       if(currentkey != '7'){
-        setPattern(seven);
+        (isNumericMode)?setPattern(seven):setPattern(emo7);
         currentkey = '7';
         drawing = true;
       }
       break;
     case(511):
       if(currentkey != '8'){
-        setPattern(eight);
+        (isNumericMode)?setPattern(eight):setPattern(emo8);
         currentkey = '8';
         drawing = true;
       }
       break;
     case(486):
       if(currentkey != '9'){
-        setPattern(nine);
+        (isNumericMode)?setPattern(nine):setPattern(emo9);
         currentkey = '9';
         drawing = true;
       }
