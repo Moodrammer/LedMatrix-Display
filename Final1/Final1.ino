@@ -26,8 +26,8 @@ int patternRowData = -1;
 int changingRowIndex = -1;
 int bitPositionValue = 512;
 boolean drawing = false;
-boolean endOfPattern;
 //patterns
+//numbers
 int zero[10] = {120, 252, 204, 204, 204, 204, 204, 204, 252, 120};
 int one[10] = {248, 248, 56, 56, 56, 56, 56, 56, 252, 252};
 int two[10] = {248, 508, 396, 12, 24, 48, 96, 192, 508, 508};
@@ -38,10 +38,32 @@ int six[10] = {120, 252, 192, 192, 248, 252, 204, 204, 252, 120};
 int seven[10] = {252, 204, 12, 28, 24, 48, 48, 96, 224, 192};
 int eight[10] = {120, 252, 204, 204, 124, 248, 204, 204, 252, 120};
 int nine[10] = {120, 252, 204, 204, 252, 124, 12, 204, 252, 120};
+//emotions
+int emo1[10] = {0,1,0,1,0,1,0,1,0,1};
 //keypad variables
 boolean isKeyRead = false;
 char currentkey = ' ';
+//password Management
+String numToEmoPass = "1234";
+String emoToNumPass = "4321";
+boolean isNumericMode = true;
+boolean countkeys = false;
+//reset password variables
+boolean ChPassFirstCheck = true;
+boolean ChPassSecondCheck = false;
+boolean ChPassThirdCheck = false;
+boolean ChPassFourthCheck = false;
+boolean resetPassword = false;
+//numeric to emotions and the opposite
+boolean nToeFirstCheck = true;
+boolean nToeSecondCheck = false;
+boolean nToeThirdCheck = false;
+boolean nToeFourthCheck = false;
 
+boolean eTonFirstCheck = true;
+boolean eTonSecondCheck = false;
+boolean eTonThirdCheck = false;
+boolean eTonFourthCheck = false;
 
 
 void setup() {
@@ -61,12 +83,14 @@ void loop() {
   //Read keypad
   if(analogRead(keypadPin)){
     if(!isKeyRead){
-      getKeyPressed();
+      setKeyPressed();
+      checkPassword(currentkey);
     }
   }
   else{
     isKeyRead = false;
   }
+  
   //keep drawing the current pattern
   if(currentMillis - shiftTime >= 1){
      drawCurrent();
@@ -77,18 +101,12 @@ void loop() {
   
   if(drawing){
     //if a pattern is currently being drawn
-    
     //each millisecond light one Led of the pattern
     if(currentMillis - drawTime >= 100){
       drawTime = currentMillis;
       setCurrentDrawing();
-      if(endOfPattern){
-        drawing = false;
-        endOfPattern = false;
-      }
     }
   }
-  
 }
 
 //pass a bit string to output on the columns of the matrix 
@@ -172,7 +190,7 @@ void setCurrentDrawing(){
    if(changingRowIndex > 9){
     //This means that we finished drawing the 10 columns of the currentPattern
     //Reset all the variables
-    endOfPattern = true;
+    drawing = false;
     changingRowIndex = -1;
     bitPositionValue = 512; 
    }
@@ -199,7 +217,7 @@ void clearMatrix(){
   }
 }
 
-void getKeyPressed(){
+void setKeyPressed(){
   int key = analogRead(keypadPin);
   switch(key){
       case(852):
@@ -211,7 +229,7 @@ void getKeyPressed(){
       break;
     case(786):
       if(currentkey != '1'){
-        setPattern(one);
+        (isNumericMode)?setPattern(one):setPattern(emo1);
         currentkey = '1';
         drawing = true;
       }
@@ -285,4 +303,151 @@ void setPattern(int pattern[]){
   currentPattern = pattern;
   changingRowIndex = -1;
   currentRow = 0;
+}
+//Password Management
+String reverseString(String str){
+  String rev = String(str[3]) + String(str[2]) + String(str[1]) + String(str[0]);
+  return rev;
+}
+
+void checkPassword(char key){
+  checkChangePasswordSequence(key);
+  //if the reset sequence was found don't check the password sequence for this character
+  if(!resetPassword){
+    if(isNumericMode){
+      checknToePasswordSequence(key);
+    }
+    else{
+      checkeTonPasswordSequence(key);
+    }    
+  }
+}
+
+//Function to check the reset password sequence 1212
+void checkChangePasswordSequence(char key){
+  if(ChPassFirstCheck){
+    if(key == '1'){
+      ChPassFirstCheck = false;
+      ChPassSecondCheck = true;
+    }
+  }
+  else if(ChPassSecondCheck){
+    if (key == '2'){ 
+      ChPassThirdCheck = true;
+      ChPassSecondCheck = false;
+      } 
+      else{
+        (key == '1')? ChPassSecondCheck = true: ChPassFirstCheck = true;
+      }
+    }
+  else if(ChPassThirdCheck){
+    (key == '1')? ChPassFourthCheck = true: ChPassFirstCheck = true;
+    ChPassThirdCheck = false;
+  }
+  else if(ChPassFourthCheck){
+    if(key == '2'){
+       //Store the next four characters as the new password
+       resetPassword = true;
+       ChPassFirstCheck = true;
+       nToeFirstCheck = true;
+       eTonFirstCheck = true;
+    }
+    else{
+      (key == '1')? ChPassSecondCheck = true: ChPassFirstCheck = true;
+    }
+
+  }
+}
+
+//Function to check the numeric to emotions mode password
+void checknToePasswordSequence(char key){
+  if(nToeFirstCheck){
+    if(key == numToEmoPass[0]){
+      nToeFirstCheck = false;
+      nToeSecondCheck = true;
+    }
+  }
+  else if(nToeSecondCheck){
+    if (key == numToEmoPass[1]){
+      nToeThirdCheck = true;
+      nToeSecondCheck = false; 
+    }
+    else{
+      (key == numToEmoPass[0])? nToeSecondCheck = true :nToeFirstCheck = true;
+    }
+    }
+  else if(nToeThirdCheck){
+    if (key == numToEmoPass[2]){
+      nToeFourthCheck = true;
+      nToeThirdCheck = false; 
+    }
+    else{
+      (key == numToEmoPass[0])? nToeSecondCheck = true: nToeFirstCheck = true;
+    }
+    
+  }
+  else if(nToeFourthCheck){
+    if(key == numToEmoPass[3]){
+         //Go to emotions mode
+      isNumericMode = false;
+      clearMatrix();
+      //reset the current drawing array
+      for(int i = 0; i <= 9; i++) currentDrawing[i] = 0;
+      drawing = false;
+      currentkey = ' ';
+      ChPassFirstCheck = true;
+      nToeFirstCheck = true;
+      eTonFirstCheck = true;
+    }
+    else{
+      (key == numToEmoPass[0])? nToeSecondCheck = true: nToeFirstCheck = true;
+    }
+
+  }
+}
+
+//Function to check the emotions to numeric mode password
+void checkeTonPasswordSequence(char key){
+  if(eTonFirstCheck){
+    if(key == emoToNumPass[0]){
+      eTonFirstCheck = false;
+      eTonSecondCheck = true;
+    }
+  }
+  else if(eTonSecondCheck){
+    if(key == emoToNumPass[1]){
+      eTonThirdCheck = true;
+      eTonSecondCheck = false; 
+    }
+    else{
+      (key == emoToNumPass[0])? eTonSecondCheck = true: eTonFirstCheck = true;
+    }
+  }
+  else if(eTonThirdCheck){
+    if (key == emoToNumPass[2]){
+      eTonFourthCheck = true;
+      eTonThirdCheck = false; 
+    }
+    else{
+      (key == emoToNumPass[0])? eTonSecondCheck = true: eTonFirstCheck = true;
+    }
+  }
+  else if(eTonFourthCheck){
+    if(key == emoToNumPass[3]){
+       //Go to numeric mode
+      isNumericMode = true;
+      clearMatrix();
+      //reset the current drawing array
+      for(int i = 0; i <= 9; i++) currentDrawing[i] = 0;
+      drawing = false;
+      currentkey = ' ';
+
+      ChPassFirstCheck = true;
+      nToeFirstCheck = true;
+      eTonFirstCheck = true;
+    }
+    else{
+      (key == emoToNumPass[0])? eTonSecondCheck = true: eTonFirstCheck = true;
+    }
+  }
 }
