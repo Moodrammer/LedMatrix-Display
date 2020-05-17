@@ -40,6 +40,7 @@ int eight[10] = {120, 252, 204, 204, 124, 248, 204, 204, 252, 120};
 int nine[10] = {120, 252, 204, 204, 252, 124, 12, 204, 252, 120};
 //keypad variables
 boolean isKeyRead = false;
+char currentkey = ' ';
 
 
 
@@ -202,50 +203,77 @@ void getKeyPressed(){
   int key = analogRead(keypadPin);
   switch(key){
       case(852):
-      setPattern(zero);
-      isKeyRead = true;
+      if(currentkey != '0'){
+        setPattern(zero);
+        currentkey = '0';
+        drawing = true;
+      }
       break;
     case(786):
-      setPattern(one);
-      drawing = true;
-      isKeyRead = true;
+      if(currentkey != '1'){
+        setPattern(one);
+        currentkey = '1';
+        drawing = true;
+      }
       break;
     case(730):
-      setPattern(two);
-      drawing = true;
-      isKeyRead = true;
+      if(currentkey != '2'){
+        setPattern(two);
+        currentkey = '2';
+        drawing = true;
+      }
       break;
      case(681):
-      setPattern(three);
-      isKeyRead = true;
+      if(currentkey != '3'){
+        setPattern(three);
+        currentkey = '3';
+        drawing = true;
+      }
       break;
     case(639):
-      setPattern(four);
-      isKeyRead = true;
+      if(currentkey != '4'){
+        setPattern(four);
+        currentkey = '4';
+        drawing = true;
+      }
       break;
     case(601):
-      setPattern(five);
-      isKeyRead = true;
+      if(currentkey != '5'){
+        setPattern(five);
+        currentkey = '5';
+        drawing = true;
+      }
       break;
     case(568):
-      setPattern(six);
-      isKeyRead = true;
+      if(currentkey != '6'){
+        setPattern(six);
+        currentkey = '6';
+        drawing = true;
+      }
       break;
     case(538):
-      setPattern(seven);
-      isKeyRead = true;
+      if(currentkey != '7'){
+        setPattern(seven);
+        currentkey = '7';
+        drawing = true;
+      }
       break;
     case(511):
-      setPattern(eight);
-      isKeyRead = true;
+      if(currentkey != '8'){
+        setPattern(eight);
+        currentkey = '8';
+        drawing = true;
+      }
       break;
     case(486):
-      setPattern(nine);
-      isKeyRead = true;
+      if(currentkey != '9'){
+        setPattern(nine);
+        currentkey = '9';
+        drawing = true;
+      }
   }
 
   isKeyRead = true;
-  drawing = true;
 }
 
 void setPattern(int pattern[]){
