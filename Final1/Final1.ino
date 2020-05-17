@@ -28,7 +28,16 @@ int bitPositionValue = 512;
 boolean drawing = false;
 boolean endOfPattern;
 //patterns
+int zero[10] = {120, 252, 204, 204, 204, 204, 204, 204, 252, 120};
 int one[10] = {248, 248, 56, 56, 56, 56, 56, 56, 252, 252};
+int two[10] = {248, 508, 396, 12, 24, 48, 96, 192, 508, 508};
+int three[10] = {252, 254, 14, 12, 248, 248, 12, 14, 254, 252};
+int four[10] = {28, 60, 108, 204, 140, 510, 510, 12, 12, 12};
+int five[10] = {252, 252, 192, 216, 252, 28, 12, 28, 252, 248};
+int six[10] = {120, 252, 192, 192, 248, 252, 204, 204, 252, 120};
+int seven[10] = {252, 204, 12, 28, 24, 48, 48, 96, 224, 192};
+int eight[10] = {120, 252, 204, 204, 124, 248, 204, 204, 252, 120};
+int nine[10] = {120, 252, 204, 204, 252, 124, 12, 204, 252, 120};
 //keypad variables
 boolean isKeyRead = false;
 
@@ -192,44 +201,60 @@ void clearMatrix(){
 void getKeyPressed(){
   int key = analogRead(keypadPin);
   switch(key){
-    case(852):
-    isKeyRead = true;
-    return;
+      case(852):
+      setPattern(zero);
+      isKeyRead = true;
+      break;
     case(786):
-    //before drawing clear the matrix
-    //reset current Drawing array
-    for(int i = 0; i <= 9; i++) currentDrawing[i] = 0;
-    //clear the ledMatrix
-    clearMatrix();
-    currentPattern = one;
-    changingRowIndex = -1;
-    currentRow = 0;
-    drawing = true;
-    isKeyRead = true;
-    return;
+      setPattern(one);
+      drawing = true;
+      isKeyRead = true;
+      break;
     case(730):
-    isKeyRead = true;
-    return;
-    case(681):
-    isKeyRead = true;
-    return;
+      setPattern(two);
+      drawing = true;
+      isKeyRead = true;
+      break;
+     case(681):
+      setPattern(three);
+      isKeyRead = true;
+      break;
     case(639):
-    isKeyRead = true;
-    return;
+      setPattern(four);
+      isKeyRead = true;
+      break;
     case(601):
-    isKeyRead = true;
-    return;
+      setPattern(five);
+      isKeyRead = true;
+      break;
     case(568):
-    isKeyRead = true;
-    return;
+      setPattern(six);
+      isKeyRead = true;
+      break;
     case(538):
-    isKeyRead = true;
-    return;
+      setPattern(seven);
+      isKeyRead = true;
+      break;
     case(511):
-    isKeyRead = true;
-    return;
+      setPattern(eight);
+      isKeyRead = true;
+      break;
     case(486):
-    isKeyRead = true;
-    return;
+      setPattern(nine);
+      isKeyRead = true;
   }
+
+  isKeyRead = true;
+  drawing = true;
+}
+
+void setPattern(int pattern[]){
+  //before drawing clear the matrix
+  //reset current Drawing array
+  for(int i = 0; i <= 9; i++) currentDrawing[i] = 0;
+  //clear the ledMatrix
+  clearMatrix();
+  currentPattern = pattern;
+  changingRowIndex = -1;
+  currentRow = 0;
 }
