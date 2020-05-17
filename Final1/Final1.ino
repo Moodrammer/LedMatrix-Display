@@ -39,7 +39,8 @@ int seven[10] = {252, 204, 12, 28, 24, 48, 48, 96, 224, 192};
 int eight[10] = {120, 252, 204, 204, 124, 248, 204, 204, 252, 120};
 int nine[10] = {120, 252, 204, 204, 252, 124, 12, 204, 252, 120};
 //emotions
-int emo1[10] = {0,1,0,1,0,1,0,1,0,1};
+int emo0[10] = {252, 258, 513, 645, 585, 513, 561, 585, 258, 252};
+int emo1[10] = {252, 258, 513, 717, 581, 513, 561, 585, 258, 252};
 //keypad variables
 boolean isKeyRead = false;
 char currentkey = ' ';
@@ -222,7 +223,7 @@ void setKeyPressed(){
   switch(key){
       case(852):
       if(currentkey != '0'){
-        setPattern(zero);
+        (isNumericMode)?setPattern(zero):setPattern(emo0);
         currentkey = '0';
         drawing = true;
       }
