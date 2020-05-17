@@ -63,6 +63,8 @@ boolean ChPassSecondCheck = false;
 boolean ChPassThirdCheck = false;
 boolean ChPassFourthCheck = false;
 boolean resetPassword = false;
+int newPasswordIndex = 0;
+String newPassword = "";
 //numeric to emotions and the opposite
 boolean nToeFirstCheck = true;
 boolean nToeSecondCheck = false;
@@ -93,7 +95,12 @@ void loop() {
   if(analogRead(keypadPin)){
     if(!isKeyRead){
       setKeyPressed();
-      checkPassword(currentkey);
+      if(!resetPassword){
+        checkPassword(currentkey);
+      }
+      else{
+        setNewPassword(currentkey);
+      }
     }
   }
   else{
@@ -458,5 +465,21 @@ void checkeTonPasswordSequence(char key){
     else{
       (key == emoToNumPass[0])? eTonSecondCheck = true: eTonFirstCheck = true;
     }
+  }
+}
+
+void setNewPassword(char key){
+  newPassword += String(key);
+  if(newPasswordIndex < 3){
+    newPasswordIndex++;
+  }
+  else{
+    //set the new passwords for numeric and emotions modes
+    numToEmoPass = newPassword;
+    emoToNumPass = reverseString(newPassword);
+    //reset the reset password variables
+    resetPassword = false;
+    newPasswordIndex = 0;
+    newPassword = "";
   }
 }
