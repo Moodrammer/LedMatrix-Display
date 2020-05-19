@@ -1,3 +1,8 @@
+//Notes about my solution
+//-----------------------
+// - I assumed that 1212 is a reserved word for changing the password & cannot be a user's password
+// - After typing 1212 , I stop delibrately checking on the password sequence and the next four keys pressed will be assigned as the new password
+//----------------------------------------------------------------------------------------------------------------------------------------------------
 #define col0 0
 #define col1 1
 #define col2 2
