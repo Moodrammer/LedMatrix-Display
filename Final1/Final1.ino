@@ -10,12 +10,27 @@
 #define col9 9
 #define clockPin 15
 #define keypadPin 14
+#define speakerPin 10
+
+//HighTime for different tones in Microseconds
+#define keyZeroToneDuration 200
+#define keyOneToneDuration 400
+#define keyTwoToneDuration 600
+#define keyThreeToneDuration 800
+#define keyFourToneDuration 1000
+#define keyFiveToneDuration 1200
+#define keySixToneDuration 1400
+#define keySevenToneDuration 1600
+#define keyEightToneDuration 1800
+#define keyNineToneDuration 2000
+#define passwordSequenceToneDuration 3000 
 
 //variables
 //time management
 unsigned long currentMillis;
 unsigned long shiftTime = 0;
 unsigned long drawTime = 0;
+unsigned long melodyTime = 0;
 //led matrix
 int currentRow = 0;
 int rowTestPattern = B11 * 256 + B11111111;
@@ -80,6 +95,7 @@ boolean eTonFourthCheck = false;
 void setup() {
   for(int i = col0; i <= col9; i++) pinMode(i, OUTPUT);
   pinMode(clockPin, OUTPUT);
+  pinMode(speakerPin, OUTPUT);
   for(int i = 16; i <= 19; i++) pinMode(i, OUTPUT);  
   
   //test switching the matrix rows and columns
@@ -242,6 +258,7 @@ void setKeyPressed(){
         currentkey = '0';
         drawing = true;
       }
+      playMelody(keyZeroToneDuration, 10);
       break;
     case(786):
       if(currentkey != '1'){
@@ -249,6 +266,7 @@ void setKeyPressed(){
         currentkey = '1';
         drawing = true;
       }
+      playMelody(keyOneToneDuration, 10);
       break;
     case(730):
       if(currentkey != '2'){
@@ -256,6 +274,7 @@ void setKeyPressed(){
         currentkey = '2';
         drawing = true;
       }
+      playMelody(keyTwoToneDuration, 10);
       break;
      case(681):
       if(currentkey != '3'){
@@ -263,6 +282,7 @@ void setKeyPressed(){
         currentkey = '3';
         drawing = true;
       }
+      playMelody(keyThreeToneDuration, 10);
       break;
     case(639):
       if(currentkey != '4'){
@@ -270,6 +290,7 @@ void setKeyPressed(){
         currentkey = '4';
         drawing = true;
       }
+      playMelody(keyFourToneDuration, 10);
       break;
     case(601):
       if(currentkey != '5'){
@@ -277,6 +298,7 @@ void setKeyPressed(){
         currentkey = '5';
         drawing = true;
       }
+      playMelody(keyFiveToneDuration, 10);
       break;
     case(568):
       if(currentkey != '6'){
@@ -284,6 +306,7 @@ void setKeyPressed(){
         currentkey = '6';
         drawing = true;
       }
+      playMelody(keySixToneDuration, 10);
       break;
     case(538):
       if(currentkey != '7'){
@@ -291,6 +314,7 @@ void setKeyPressed(){
         currentkey = '7';
         drawing = true;
       }
+      playMelody(keySevenToneDuration, 10);
       break;
     case(511):
       if(currentkey != '8'){
@@ -298,6 +322,7 @@ void setKeyPressed(){
         currentkey = '8';
         drawing = true;
       }
+      playMelody(keyEightToneDuration, 10);
       break;
     case(486):
       if(currentkey != '9'){
@@ -305,6 +330,7 @@ void setKeyPressed(){
         currentkey = '9';
         drawing = true;
       }
+      playMelody(keyNineToneDuration, 10);
   }
 
   isKeyRead = true;
@@ -407,6 +433,7 @@ void checknToePasswordSequence(char key){
          //Go to emotions mode
       isNumericMode = false;
       clearMatrix();
+      playMelody(passwordSequenceToneDuration, 1000);
       //reset the current drawing array
       for(int i = 0; i <= 9; i++) currentDrawing[i] = 0;
       drawing = false;
@@ -453,6 +480,7 @@ void checkeTonPasswordSequence(char key){
        //Go to numeric mode
       isNumericMode = true;
       clearMatrix();
+      playMelody(passwordSequenceToneDuration, 1000);
       //reset the current drawing array
       for(int i = 0; i <= 9; i++) currentDrawing[i] = 0;
       drawing = false;
@@ -481,5 +509,16 @@ void setNewPassword(char key){
     resetPassword = false;
     newPasswordIndex = 0;
     newPassword = "";
+  }
+}
+
+void playMelody(int duration, int toneDuration){
+  melodyTime = currentMillis;
+  while(melodyTime - currentMillis <= toneDuration){
+    digitalWrite(speakerPin, HIGH);
+    delayMicroseconds(duration);
+    digitalWrite(speakerPin, LOW);
+    delayMicroseconds(duration);
+    melodyTime = millis();
   }
 }
