@@ -18,12 +18,12 @@
 #define keyTwoToneDuration 600
 #define keyThreeToneDuration 800
 #define keyFourToneDuration 1000
-#define keyFiveToneDuration 1200
-#define keySixToneDuration 1400
-#define keySevenToneDuration 1600
-#define keyEightToneDuration 1800
-#define keyNineToneDuration 2000
-#define passwordSequenceToneDuration 3000 
+#define keyFiveToneDuration 1400
+#define keySixToneDuration 1800
+#define keySevenToneDuration 2100
+#define keyEightToneDuration 2500
+#define keyNineToneDuration 3300
+#define passwordSequenceToneDuration 4000 
 
 //variables
 //time management
