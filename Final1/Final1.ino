@@ -76,7 +76,6 @@ char currentkey = ' ';
 String numToEmoPass = "1234";
 String emoToNumPass = "4321";
 boolean isNumericMode = true;
-boolean countkeys = false;
 //reset password variables
 boolean ChPassFirstCheck = true;
 boolean ChPassSecondCheck = false;
