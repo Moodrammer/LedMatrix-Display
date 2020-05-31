@@ -28,6 +28,17 @@
 #define keySevenToneDuration 2100
 #define keyEightToneDuration 2500
 #define keyNineToneDuration 3300
+
+#define emo0ToneDuration 3700
+#define emo1ToneDuration 2800
+#define emo2ToneDuration 2300
+#define emo3ToneDuration 2000
+#define emo4ToneDuration 1600
+#define emo5ToneDuration 1200
+#define emo6ToneDuration 900
+#define emo7ToneDuration 700
+#define emo8ToneDuration 500
+#define emo9ToneDuration 300
 #define passwordSequenceToneDuration 4000 
 
 //variables
@@ -262,7 +273,7 @@ void setKeyPressed(){
         currentkey = '0';
         drawing = true;
       }
-      playMelody(keyZeroToneDuration, 10);
+      (isNumericMode)? playMelody(keyZeroToneDuration, 10): playMelody(emo0ToneDuration, 10);
       break;
     case(786):
       if(currentkey != '1'){
@@ -270,7 +281,7 @@ void setKeyPressed(){
         currentkey = '1';
         drawing = true;
       }
-      playMelody(keyOneToneDuration, 10);
+      (isNumericMode)? playMelody(keyOneToneDuration, 10): playMelody(emo1ToneDuration, 10);
       break;
     case(730):
       if(currentkey != '2'){
@@ -278,7 +289,7 @@ void setKeyPressed(){
         currentkey = '2';
         drawing = true;
       }
-      playMelody(keyTwoToneDuration, 10);
+      (isNumericMode)?playMelody(keyTwoToneDuration, 10): playMelody(emo2ToneDuration, 10);
       break;
      case(681):
       if(currentkey != '3'){
@@ -286,7 +297,7 @@ void setKeyPressed(){
         currentkey = '3';
         drawing = true;
       }
-      playMelody(keyThreeToneDuration, 10);
+      (isNumericMode)?playMelody(keyThreeToneDuration, 10): playMelody(emo3ToneDuration, 10);
       break;
     case(639):
       if(currentkey != '4'){
@@ -294,7 +305,7 @@ void setKeyPressed(){
         currentkey = '4';
         drawing = true;
       }
-      playMelody(keyFourToneDuration, 10);
+      (isNumericMode)?playMelody(keyFourToneDuration, 10): playMelody(emo4ToneDuration, 10);
       break;
     case(601):
       if(currentkey != '5'){
@@ -302,7 +313,7 @@ void setKeyPressed(){
         currentkey = '5';
         drawing = true;
       }
-      playMelody(keyFiveToneDuration, 10);
+      (isNumericMode)?playMelody(keyFiveToneDuration, 10): playMelody(emo5ToneDuration, 10);
       break;
     case(568):
       if(currentkey != '6'){
@@ -310,7 +321,7 @@ void setKeyPressed(){
         currentkey = '6';
         drawing = true;
       }
-      playMelody(keySixToneDuration, 10);
+      (isNumericMode)?playMelody(keySixToneDuration, 10): playMelody(emo6ToneDuration, 10);
       break;
     case(538):
       if(currentkey != '7'){
@@ -318,7 +329,7 @@ void setKeyPressed(){
         currentkey = '7';
         drawing = true;
       }
-      playMelody(keySevenToneDuration, 10);
+      (isNumericMode)?playMelody(keySevenToneDuration, 10): playMelody(emo7ToneDuration, 10);
       break;
     case(511):
       if(currentkey != '8'){
@@ -326,7 +337,7 @@ void setKeyPressed(){
         currentkey = '8';
         drawing = true;
       }
-      playMelody(keyEightToneDuration, 10);
+      (isNumericMode)?playMelody(keyEightToneDuration, 10): playMelody(emo8ToneDuration, 10);
       break;
     case(486):
       if(currentkey != '9'){
@@ -334,7 +345,7 @@ void setKeyPressed(){
         currentkey = '9';
         drawing = true;
       }
-      playMelody(keyNineToneDuration, 10);
+      (isNumericMode)?playMelody(keyNineToneDuration, 10): playMelody(emo9ToneDuration, 10);
   }
 
   isKeyRead = true;
